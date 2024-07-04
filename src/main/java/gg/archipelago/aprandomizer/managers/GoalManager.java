@@ -1,6 +1,5 @@
 package gg.archipelago.aprandomizer.managers;
 
-import gg.archipelago.client.ClientStatus;
 import gg.archipelago.aprandomizer.APRandomizer;
 import gg.archipelago.aprandomizer.APStorage.APMCData;
 import gg.archipelago.aprandomizer.capability.APCapabilities;
@@ -8,6 +7,8 @@ import gg.archipelago.aprandomizer.capability.data.WorldData;
 import gg.archipelago.aprandomizer.common.Utils.Utils;
 import gg.archipelago.aprandomizer.managers.advancementmanager.AdvancementManager;
 import gg.archipelago.aprandomizer.managers.itemmanager.ItemManager;
+import dev.koifysh.archipelago.ClientStatus;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -56,17 +57,17 @@ public class GoalManager {
 
     public void initializeInfoBar() {
         CustomBossEvents bossInfoManager = APRandomizer.getServer().getCustomBossEvents();
-        advancementInfoBar = bossInfoManager.create(new ResourceLocation(APRandomizer.MODID,"advancementinfobar"), Component.literal(""));
+        advancementInfoBar = bossInfoManager.create(ResourceLocation.fromNamespaceAndPath(APRandomizer.MODID,"advancementinfobar"), Component.literal(""));
         advancementInfoBar.setMax(advancementsRequired);
         advancementInfoBar.setColor(BossEvent.BossBarColor.PINK);
         advancementInfoBar.setOverlay(BossEvent.BossBarOverlay.NOTCHED_10);
 
-        eggInfoBar = bossInfoManager.create(new ResourceLocation(APRandomizer.MODID,"egginfobar"), Component.literal(""));
+        eggInfoBar = bossInfoManager.create(ResourceLocation.fromNamespaceAndPath(APRandomizer.MODID,"egginfobar"), Component.literal(""));
         eggInfoBar.setMax(dragonEggShardsRequired);
         eggInfoBar.setColor(BossEvent.BossBarColor.WHITE);
         eggInfoBar.setOverlay(BossEvent.BossBarOverlay.NOTCHED_6);
 
-        connectionInfoBar = bossInfoManager.create(new ResourceLocation(APRandomizer.MODID,"connectioninfobar"), Component.literal("Not connected to Archipelago").withStyle(Style.EMPTY.withColor(TextColor.parseColor("red"))));
+        connectionInfoBar = bossInfoManager.create(ResourceLocation.fromNamespaceAndPath(APRandomizer.MODID,"connectioninfobar"), Component.literal("Not connected to Archipelago").withStyle(Style.EMPTY.withColor(ChatFormatting.getByName("red"))));
         connectionInfoBar.setMax(1);
         connectionInfoBar.setValue(1);
         connectionInfoBar.setColor(BossEvent.BossBarColor.RED);

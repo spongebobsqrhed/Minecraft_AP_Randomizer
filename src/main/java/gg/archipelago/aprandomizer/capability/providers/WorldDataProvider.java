@@ -3,6 +3,7 @@ package gg.archipelago.aprandomizer.capability.providers;
 import gg.archipelago.aprandomizer.capability.APCapabilities;
 import gg.archipelago.aprandomizer.capability.data.WorldData;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
@@ -12,10 +13,14 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class WorldDataProvider implements ICapabilitySerializable<Tag> {
 
 
-    private final WorldData worldData = new WorldData();
+	private static final Logger LOGGER = LogManager.getLogger();
+	private final WorldData worldData = new WorldData();
 
     /**
      * Asks the Provider if it has the given capability
@@ -47,19 +52,21 @@ public class WorldDataProvider implements ICapabilitySerializable<Tag> {
     }
 
     @Override
-    public Tag serializeNBT() {
+    public Tag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag nbt = new CompoundTag();
         nbt.putInt("dragonState", worldData.getDragonState());
+        nbt.putInt("informMode", worldData.getInformMode());
         nbt.putString("seedName", worldData.getSeedName());
         nbt.putBoolean("jailPlayers", worldData.getJailPlayers());
         return nbt;
     }
 
     @Override
-    public void deserializeNBT(Tag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider,Tag nbt) {
         if (nbt.getType() == CompoundTag.TYPE) {
             CompoundTag read = (CompoundTag) nbt;
             worldData.setSeedName(read.getString("seedName"));
+            worldData.setInformMode(read.getInt("informMode"));
             worldData.setDragonState(read.getInt("dragonState"));
             worldData.setJailPlayers(read.getBoolean("jailPlayers"));
         }

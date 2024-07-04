@@ -1,19 +1,28 @@
 package gg.archipelago.aprandomizer.common.Utils;
 
+import java.awt.Color;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import gg.archipelago.client.Print.APPrint;
-import gg.archipelago.client.Print.APPrintColor;
-import gg.archipelago.client.Print.APPrintPart;
-import gg.archipelago.client.Print.APPrintType;
+
 import gg.archipelago.aprandomizer.APRandomizer;
 import gg.archipelago.aprandomizer.capability.APCapabilities;
 import gg.archipelago.aprandomizer.capability.data.WorldData;
+import dev.koifysh.archipelago.Print.APPrint;
+import dev.koifysh.archipelago.Print.APPrintColor;
+import dev.koifysh.archipelago.Print.APPrintPart;
+import dev.koifysh.archipelago.Print.APPrintType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.chat.ChatType;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -27,16 +36,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.LodestoneTracker;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.Vec3;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.awt.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Utils {
     // Directly reference a log4j logger.
@@ -206,12 +209,9 @@ public class Utils {
         return new Vec3(x,y,z);
     }
 
-    public static void addLodestoneTags(ResourceKey<Level> worldRegistryKey, BlockPos blockPos, CompoundTag nbt) {
-        nbt.put("LodestonePos", NbtUtils.writeBlockPos(blockPos));
-        Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, worldRegistryKey).resultOrPartial(LOGGER::error).ifPresent((p_234668_1_) -> {
-            nbt.put("LodestoneDimension", p_234668_1_);
-        });
-        nbt.putBoolean("LodestoneTracked", false);
+    public static void addLodestoneTags(ResourceKey<Level> worldRegistryKey, BlockPos blockPos, ItemStack iStack) {
+        LodestoneTracker tracker = new LodestoneTracker(Optional.of(new GlobalPos(worldRegistryKey, blockPos)), false);
+    	iStack.applyComponentsAndValidate(DataComponentPatch.builder().set(DataComponents.LODESTONE_TRACKER,tracker).build());
     }
 
     public static void giveItemToPlayer(ServerPlayer player, ItemStack itemstack) {

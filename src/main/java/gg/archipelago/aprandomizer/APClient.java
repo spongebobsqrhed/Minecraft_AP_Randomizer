@@ -1,28 +1,21 @@
 package gg.archipelago.aprandomizer;
 
-import gg.archipelago.aprandomizer.events.*;
-import gg.archipelago.client.ItemFlags;
-import gg.archipelago.client.Print.APPrint;
-import gg.archipelago.client.Print.APPrintColor;
-import gg.archipelago.client.events.ConnectionAttemptEvent;
-import gg.archipelago.client.events.ConnectionResultEvent;
-import gg.archipelago.client.network.ConnectionResult;
-import gg.archipelago.client.parts.NetworkItem;
-import gg.archipelago.aprandomizer.APStorage.APMCData;
-import gg.archipelago.aprandomizer.common.Utils.Utils;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import gg.archipelago.aprandomizer.common.Utils.Utils;
+import gg.archipelago.aprandomizer.events.AttemptedConnection;
+import gg.archipelago.aprandomizer.events.ConnectResult;
+import gg.archipelago.aprandomizer.events.LocationChecked;
+import gg.archipelago.aprandomizer.events.ReceiveItem;
+import gg.archipelago.aprandomizer.events.onDeathLink;
+import gg.archipelago.aprandomizer.events.onMC35;
+import dev.koifysh.archipelago.ItemFlags;
+import dev.koifysh.archipelago.Print.APPrint;
+import dev.koifysh.archipelago.parts.NetworkItem;
+import net.minecraft.server.MinecraftServer;
 
-public class APClient extends gg.archipelago.client.ArchipelagoClient {
+public class APClient extends dev.koifysh.archipelago.Client {
 
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
@@ -56,14 +49,6 @@ public class APClient extends gg.archipelago.client.ArchipelagoClient {
 
     public SlotData getSlotData() {
         return slotData;
-    }
-
-
-    @Override
-    public void onPrint(String print) {
-        if (!print.startsWith(getAlias() + ":")) {
-            Utils.sendMessageToAll(print);
-        }
     }
 
     @Override

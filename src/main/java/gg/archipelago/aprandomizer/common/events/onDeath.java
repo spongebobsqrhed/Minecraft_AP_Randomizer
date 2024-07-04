@@ -1,6 +1,6 @@
 package gg.archipelago.aprandomizer.common.events;
 
-import gg.archipelago.client.network.client.BouncePacket;
+import dev.koifysh.archipelago.network.client.BouncePacket;
 import gg.archipelago.aprandomizer.APRandomizer;
 import gg.archipelago.aprandomizer.common.DeathLinkDamage;
 import net.minecraft.server.MinecraftServer;

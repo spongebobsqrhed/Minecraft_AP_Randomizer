@@ -4,9 +4,9 @@ import gg.archipelago.aprandomizer.APClient;
 import gg.archipelago.aprandomizer.APRandomizer;
 import gg.archipelago.aprandomizer.SlotData;
 import gg.archipelago.aprandomizer.common.Utils.Utils;
-import gg.archipelago.client.events.ArchipelagoEventListener;
-import gg.archipelago.client.events.ConnectionResultEvent;
-import gg.archipelago.client.network.ConnectionResult;
+import dev.koifysh.archipelago.events.ArchipelagoEventListener;
+import dev.koifysh.archipelago.events.ConnectionResultEvent;
+import dev.koifysh.archipelago.network.ConnectionResult;
 import net.minecraft.server.level.ServerPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +47,6 @@ public class ConnectResult {
 
             //give our item manager the list of received items to give to players as they log in.
             APRandomizer.getItemManager().setReceivedItems(client.getItemManager().getReceivedItemIDs());
-
             //reset and catch up our global recipe list to be consistent with what we just got from the AP server
             APRandomizer.getRecipeManager().resetRecipes();
             APRandomizer.getRecipeManager().grantRecipeList(client.getItemManager().getReceivedItemIDs());

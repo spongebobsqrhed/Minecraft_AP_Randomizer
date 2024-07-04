@@ -1,20 +1,25 @@
 package gg.archipelago.aprandomizer.capability.providers;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import gg.archipelago.aprandomizer.capability.APCapabilities;
 import gg.archipelago.aprandomizer.capability.data.PlayerData;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.storage.PlayerDataStorage;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 public class PlayerDataProvider implements ICapabilitySerializable<Tag> {
 
-
+	private static final Logger LOGGER = LogManager.getLogger();
     private final PlayerData playerData = new PlayerData();
 
     /**
@@ -47,14 +52,14 @@ public class PlayerDataProvider implements ICapabilitySerializable<Tag> {
     }
 
     @Override
-    public Tag serializeNBT() {
-        return IntTag.valueOf(playerData.getIndex());
+    public Tag serializeNBT(HolderLookup.Provider provider) {
+    	return IntTag.valueOf(playerData.getIndex());
     }
 
     @Override
-    public void deserializeNBT(Tag nbt) {
-        int index = 0;
-        if (nbt.getType() == IntTag.TYPE) {
+    public void deserializeNBT(HolderLookup.Provider provider, Tag nbt) {
+    	int index = 0;
+    	if (nbt.getType() == IntTag.TYPE) {
             index = ((IntTag) nbt).getAsInt();
         }
         playerData.setIndex(index);

@@ -1,0 +1,91 @@
+{
+  "parent": "aprandomizer:archipelago/root",
+  "criteria": {
+    "all_discs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:music_disc_13"
+          },
+          {
+            "items": "minecraft:music_disc_cat"
+          },
+          {
+            "items": "minecraft:music_disc_blocks"
+          },
+          {
+            "items": "minecraft:music_disc_chirp"
+          },
+		  {
+            "items": "minecraft:music_disc_far"
+          },
+          {
+            "items": "minecraft:music_disc_mall"
+          },
+          {
+            "items": "minecraft:music_disc_mellohi"
+          },
+		  {
+            "items": "minecraft:music_disc_stal"
+          },
+          {
+            "items": "minecraft:music_disc_strad"
+          },
+          {
+            "items": "minecraft:music_disc_ward"
+          },
+		  {
+            "items": "minecraft:music_disc_11"
+          },
+          {
+            "items": "minecraft:music_disc_wait"
+          },
+          {
+            "items": "minecraft:music_disc_otherside"
+          },
+		  {
+            "items": "minecraft:music_disc_5"
+          },
+          {
+            "items": "minecraft:music_disc_pigstep"
+          },
+          {
+            "items": "minecraft:music_disc_relic"
+          },
+		  {
+            "items": "minecraft:music_disc_creator"
+          },
+          {
+            "items": "minecraft:music_disc_creator_music_box"
+          },
+          {
+            "items": "minecraft:music_disc_precipice"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "text": "Collect all the music discs in the game and hold them at the same time."
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:music_disc_otherside"
+    },
+    "title": {
+      "text": "Tunes of the Raft"
+    }
+  },
+  "requirements": [
+    [
+      "all_discs"
+    ]
+  ],
+  "rewards": {
+    "experience": 100
+  },
+  "sends_telemetry_event": true
+}

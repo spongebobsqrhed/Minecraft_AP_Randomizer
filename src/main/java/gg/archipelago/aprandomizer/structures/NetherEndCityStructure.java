@@ -1,8 +1,12 @@
 package gg.archipelago.aprandomizer.structures;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.google.common.collect.Lists;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import gg.archipelago.aprandomizer.APStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
@@ -13,13 +17,10 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.structures.EndCityPieces;
 
-import java.util.List;
-import java.util.Optional;
-
 public class NetherEndCityStructure extends Structure {
-    public static final Codec<NetherEndCityStructure> CODEC = RecordCodecBuilder.<NetherEndCityStructure>mapCodec(instance ->
+    public static final MapCodec<NetherEndCityStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(settingsCodec(instance)
-            ).apply(instance, NetherEndCityStructure::new)).codec();
+            ).apply(instance, NetherEndCityStructure::new));
 
     public NetherEndCityStructure(Structure.StructureSettings config)
     {

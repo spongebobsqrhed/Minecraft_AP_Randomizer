@@ -1,47 +1,70 @@
 package gg.archipelago.aprandomizer;
 
-import com.google.gson.Gson;
-import gg.archipelago.client.network.client.BouncePacket;
-import gg.archipelago.aprandomizer.APStorage.APMCData;
-import gg.archipelago.aprandomizer.capability.APCapabilities;
-import gg.archipelago.aprandomizer.capability.data.WorldData;
-import gg.archipelago.aprandomizer.common.Utils.Utils;
-import gg.archipelago.aprandomizer.managers.GoalManager;
-import gg.archipelago.aprandomizer.managers.advancementmanager.AdvancementManager;
-import gg.archipelago.aprandomizer.managers.itemmanager.ItemManager;
-import gg.archipelago.aprandomizer.managers.recipemanager.RecipeManager;
-import gg.archipelago.aprandomizer.modifiers.APStructureModifier;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.ChunkStatus;
-import net.minecraft.world.level.dimension.end.EndDragonFight;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.*;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.google.gson.Gson;
+
+import dev.koifysh.archipelago.network.client.BouncePacket;
+import gg.archipelago.aprandomizer.APStorage.APMCData;
+import gg.archipelago.aprandomizer.capability.APCapabilities;
+import gg.archipelago.aprandomizer.capability.data.WorldData;
+import gg.archipelago.aprandomizer.common.Utils.Utils;
+import gg.archipelago.aprandomizer.events.ReceiveItem;
+import gg.archipelago.aprandomizer.managers.GoalManager;
+import gg.archipelago.aprandomizer.managers.advancementmanager.AdvancementManager;
+import gg.archipelago.aprandomizer.managers.itemmanager.ItemManager;
+import gg.archipelago.aprandomizer.managers.recipemanager.RecipeManager;
+import gg.archipelago.aprandomizer.modifiers.APStructureModifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackSelectionConfig;
+import net.minecraft.server.packs.PathPackResources;
+import net.minecraft.server.packs.repository.KnownPack;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
+import net.minecraft.world.level.dimension.end.EndDragonFight;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.scores.DisplaySlot;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria.RenderType;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.moddiscovery.ModFile;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(APRandomizer.MODID)
@@ -65,19 +88,20 @@ public class APRandomizer {
         this.add(7); //mc 1.17.1
         this.add(8); //mc 1.18.2
         this.add(9); //mc 1.19
+        this.add(11);
     }};
     static private boolean jailPlayers = true;
     static private BlockPos jailCenter = BlockPos.ZERO;
-    static private WorldData worldData;
+    static public WorldData worldData;
     static private double lastDeathTimestamp;
 
     public APRandomizer() {
-        LOGGER.info("Minecraft Archipelago 1.20.1 v0.1.1 Randomizer initializing.");
+        LOGGER.info("Minecraft Archipelago 1.21 v0.1.0 Randomizer initializing.");
 
         // Register ourselves for server and other game events we are interested in
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.register(this);
-
+        
 
         Gson gson = new Gson();
         try {
@@ -104,13 +128,13 @@ public class APRandomizer {
                 apmcData.state = APMCData.State.MISSING;
             }
         }
-
+        LOGGER.info("State: "+apmcData.state +" Version: "+apmcData.client_version);
         // For registration and init stuff.
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         APStructures.DEFERRED_REGISTRY_STRUCTURE.register(modEventBus);
         APStructureModifier.structureModifiers.register(modEventBus);
         APStructureModifier.structureModifiers.register("ap_structure_modifier",APStructureModifier::makeCodec);
-
+        
     }
 
     public static APClient getAP() {
@@ -186,6 +210,7 @@ public class APRandomizer {
             LOGGER.error("invalid APMC file");
         }
         server = event.getServer();
+        LOGGER.debug("About to search!");
     }
 
     @SuppressWarnings("UnusedAssignment")
@@ -197,8 +222,12 @@ public class APRandomizer {
         recipeManager = new RecipeManager();
         itemManager = new ItemManager();
         goalManager = new GoalManager();
-
-
+        
+        ReceiveItem.SetScoreBoard(server.getScoreboard());
+        
+        if(server.getScoreboard().getObjective("Received Items") == null)
+        	server.getScoreboard().addObjective("Received Items", ObjectiveCriteria.DUMMY, Component.literal("Received Items"), RenderType.INTEGER, true,null);
+        server.getScoreboard().setDisplayObjective(DisplaySlot.SIDEBAR, server.getScoreboard().getObjective("Received Items"));
         server.getGameRules().getRule(GameRules.RULE_LIMITED_CRAFTING).set(true, server);
         server.getGameRules().getRule(GameRules.RULE_KEEPINVENTORY).set(true, server);
         server.getGameRules().getRule(GameRules.RULE_ANNOUNCE_ADVANCEMENTS).set(false, server);
@@ -208,8 +237,8 @@ public class APRandomizer {
         worldData = server.getLevel(Level.OVERWORLD).getCapability(APCapabilities.WORLD_DATA).orElseThrow(AssertionError::new);
         jailPlayers = worldData.getJailPlayers();
         advancementManager.setCheckedAdvancements(worldData.getLocations());
-
-
+        
+        server.getPackRepository().getAvailableIds().forEach((id)->{LOGGER.debug(id);  });
         //check if APMC data is present and if the seed matches what we expect
         if (apmcData.state == APMCData.State.VALID && !worldData.getSeedName().equals(apmcData.seed_name)) {
             //check to see if our worlddata is empty if it is then save the aproom data.
@@ -239,7 +268,7 @@ public class APRandomizer {
         //check to see if the chunk is loaded then fetch/generate if it is not.
         if (!nether.hasChunk(0, 0)) { //Chunk is unloaded
             ChunkAccess chunk = nether.getChunk(0, 0, ChunkStatus.EMPTY, true);
-            if (!chunk.getStatus().isOrAfter(ChunkStatus.FULL)) {
+            if (!chunk.getPersistedStatus().isOrAfter(ChunkStatus.FULL)) {
                 chunk = nether.getChunk(0, 0, ChunkStatus.FULL);
             }
         }
@@ -250,7 +279,7 @@ public class APRandomizer {
         //check to see if the chunk is loaded then fetch/generate if it is not.
         if (!theEnd.hasChunk(0, 0)) { //Chunk is unloaded
             ChunkAccess chunk = theEnd.getChunk(0, 0, ChunkStatus.EMPTY, true);
-            if (!chunk.getStatus().isOrAfter(ChunkStatus.FULL)) {
+            if (!chunk.getHighestGeneratedStatus().isOrAfter(ChunkStatus.FULL)) {
                 chunk = theEnd.getChunk(0, 0, ChunkStatus.FULL);
             }
         }
@@ -282,7 +311,8 @@ public class APRandomizer {
             ServerLevel overworld = server.getLevel(Level.OVERWORLD);
             BlockPos spawn = overworld.getSharedSpawnPos();
             // alter the spawn box position, so it doesn't interfere with spawning
-            StructureTemplate jail = overworld.getStructureManager().get(new ResourceLocation(MODID,"spawnjail")).get();
+          //  LOGGER.info("\n\n\n"+ResourceLocation.fromNamespaceAndPath(MODID,"spawnjail").toString()+"\n\n\n");
+            StructureTemplate jail = overworld.getStructureManager().get(ResourceLocation.fromNamespaceAndPath(MODID,"spawnjail")).get();
             BlockPos jailPos = new BlockPos(spawn.getX()+5, 300, spawn.getZ()+5);
             jailCenter = new BlockPos(jailPos.getX() + (jail.getSize().getX()/2),jailPos.getY() + 1, jailPos.getZ() + (jail.getSize().getZ()/2));
             jail.placeInWorld(overworld,jailPos,jailPos,new StructurePlaceSettings(), RandomSource.create(),2);

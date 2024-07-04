@@ -1,11 +1,11 @@
 package gg.archipelago.aprandomizer.managers.recipemanager;
 
-import net.minecraft.world.item.crafting.Recipe;
-
 import java.util.Set;
+
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 public interface APRecipe {
 
-    Set<Recipe<?>> getGrantedRecipes();
+    Set<RecipeHolder<?>> getGrantedRecipes();
 
 }

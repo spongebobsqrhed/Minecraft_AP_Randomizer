@@ -1,22 +1,24 @@
 package gg.archipelago.aprandomizer;
 
-import archipelagoClient.com.google.gson.JsonArray;
-import archipelagoClient.com.google.gson.JsonElement;
-import archipelagoClient.com.google.gson.JsonObject;
-import archipelagoClient.com.google.gson.JsonParser;
-import archipelagoClient.com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.annotations.SerializedName;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import gg.archipelago.aprandomizer.common.Utils.Utils;
 import net.minecraft.ResourceLocationException;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
 
 public class SlotData {
 
@@ -71,19 +73,21 @@ public class SlotData {
             int amount = object.has("amount") ? object.get("amount").getAsInt() : 1;
 
             try {
-                Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName));
+                Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemName));
 
                 //air is the default item returned if the resource name is invalid.
                 if(item == Items.AIR) {
                     Utils.sendMessageToAll("No such item \"" + itemName + "\"");
                     continue;
                 }
-
+                if(object.has("nbt")) {
+                	Utils.sendMessageToAll("Nbt will no longer be supported");
+                }
                 ItemStack iStack = new ItemStack(item,amount);
-
-                if(object.has("nbt"))
-                    iStack.setTag(TagParser.parseTag(object.get("nbt").getAsString()));
-
+                if(object.has("components"))
+                   iStack.set(DataComponents.CUSTOM_DATA, CustomData.of(TagParser.parseTag(object.get("components").getAsString())));
+                    //setTag(TagParser.parseTag(object.get("nbt").getAsString()));
+               
                 startingItemStacks.add(iStack);
 
             } catch (CommandSyntaxException e) {

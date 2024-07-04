@@ -9,30 +9,26 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
+@AutoRegisterCapability
 public class APCapabilities {
     public static Capability<PlayerData> PLAYER_INDEX = CapabilityManager.get(new CapabilityToken<>(){});
     public static Capability<WorldData> WORLD_DATA = CapabilityManager.get(new CapabilityToken<>(){});
 
 
-    @SubscribeEvent
-    public static void RegisterPlayerData(RegisterCapabilitiesEvent event) {
-        event.register(PlayerData.class);
-        event.register(WorldData.class);
-    }
-
+   
     @SubscribeEvent
     static void onAttachCapabilitiesToEntityEvent(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof ServerPlayer) {
-            event.addCapability(new ResourceLocation(APRandomizer.MODID + ":player_data"), new PlayerDataProvider());
+            event.addCapability( ResourceLocation.parse(APRandomizer.MODID + ":player_data"), new PlayerDataProvider());
             event.addListener(() -> {
                 
             });
@@ -41,6 +37,6 @@ public class APCapabilities {
 
     @SubscribeEvent
     static void onAttachCapabilitiesToWorldEvent(AttachCapabilitiesEvent<Level> event) {
-        event.addCapability(new ResourceLocation(APRandomizer.MODID + ":world_data"), new WorldDataProvider());
+        event.addCapability(ResourceLocation.parse(APRandomizer.MODID + ":world_data"), new WorldDataProvider());
     }
 }

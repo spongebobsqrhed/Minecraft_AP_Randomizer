@@ -1,16 +1,18 @@
 package gg.archipelago.aprandomizer.modifiers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+
 import gg.archipelago.aprandomizer.APRandomizer;
 import gg.archipelago.aprandomizer.APStorage.APMCData;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -18,12 +20,8 @@ import net.minecraftforge.common.world.ModifiableStructureInfo;
 import net.minecraftforge.common.world.StructureModifier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryManager;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.server.ServerLifecycleHooks;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class APStructureModifier implements StructureModifier {
 
@@ -44,16 +42,16 @@ public class APStructureModifier implements StructureModifier {
         Registry<Biome> biomeRegistry = ServerLifecycleHooks.getCurrentServer().registryAccess().registryOrThrow(Registries.BIOME);
 
         //get structure biome holdersets.
-        TagKey<Biome> overworldTag = TagKey.create(Registries.BIOME, new ResourceLocation("aprandomizer","overworld_structure"));
+        TagKey<Biome> overworldTag = TagKey.create(Registries.BIOME,ResourceLocation.fromNamespaceAndPath("aprandomizer","overworld_structure"));
         overworldStructures = biomeRegistry.getTag(overworldTag).orElseThrow();
 
-        TagKey<Biome> netherTag = TagKey.create(Registries.BIOME, new ResourceLocation("aprandomizer","nether_structure"));
+        TagKey<Biome> netherTag = TagKey.create(Registries.BIOME,  ResourceLocation.fromNamespaceAndPath("aprandomizer","nether_structure"));
         netherStructures = biomeRegistry.getTag(netherTag).orElseThrow();
 
-        TagKey<Biome> endTag = TagKey.create(Registries.BIOME, new ResourceLocation("aprandomizer","end_structure"));
+        TagKey<Biome> endTag = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("aprandomizer","end_structure"));
         endStructures = biomeRegistry.getTag(endTag).orElseThrow();
 
-        TagKey<Biome> noneTag = TagKey.create(Registries.BIOME, new ResourceLocation("aprandomizer","none"));
+        TagKey<Biome> noneTag = TagKey.create(Registries.BIOME,  ResourceLocation.fromNamespaceAndPath("aprandomizer","none"));
         noBiomes = biomeRegistry.getTag(noneTag).orElseThrow();
 
         APMCData data = APRandomizer.getApmcData();
@@ -69,8 +67,8 @@ public class APStructureModifier implements StructureModifier {
         }
     }
 
-    public static final DeferredRegister<Codec<? extends StructureModifier>> structureModifiers = DeferredRegister.create(ForgeRegistries.Keys.STRUCTURE_MODIFIER_SERIALIZERS, APRandomizer.MODID);
-    private static final RegistryObject<Codec<? extends StructureModifier>> SERIALIZER = RegistryObject.create(new ResourceLocation(APRandomizer.MODID, "ap_structure_modifier"), ForgeRegistries.Keys.STRUCTURE_MODIFIER_SERIALIZERS, APRandomizer.MODID);
+    public static final DeferredRegister<MapCodec<? extends StructureModifier>> structureModifiers = DeferredRegister.create(ForgeRegistries.Keys.STRUCTURE_MODIFIER_SERIALIZERS, APRandomizer.MODID);
+    private static final RegistryObject<MapCodec<? extends StructureModifier>> SERIALIZER = RegistryObject.create(ResourceLocation.fromNamespaceAndPath(APRandomizer.MODID, "ap_structure_modifier"), ForgeRegistries.Keys.STRUCTURE_MODIFIER_SERIALIZERS, APRandomizer.MODID);
     @Override
     public void modify(Holder<Structure> structure, Phase phase, ModifiableStructureInfo.StructureInfo.Builder builder) {
         if (!phase.equals(Phase.MODIFY) || structure.unwrapKey().isEmpty()) return;
@@ -114,12 +112,12 @@ public class APStructureModifier implements StructureModifier {
     }
 
     @Override
-    public Codec<? extends StructureModifier> codec() {
-        return (Codec)SERIALIZER.get();
+    public MapCodec<? extends StructureModifier> codec() {
+        return (MapCodec)SERIALIZER.get();
     }
 
-    public static Codec<APStructureModifier> makeCodec() {
-        return Codec.unit(APStructureModifier::new);
+    public static MapCodec<APStructureModifier> makeCodec() {
+        return MapCodec.unit(APStructureModifier::new);
     }
 }
 

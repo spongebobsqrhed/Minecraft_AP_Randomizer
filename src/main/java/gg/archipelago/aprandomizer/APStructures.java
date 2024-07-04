@@ -1,15 +1,21 @@
 package gg.archipelago.aprandomizer;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+
 import gg.archipelago.aprandomizer.structures.BeeGroveStructure;
 import gg.archipelago.aprandomizer.structures.NetherEndCityStructure;
 import gg.archipelago.aprandomizer.structures.NetherVillageStructure;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.camel.Camel;
+import net.minecraft.world.entity.monster.Husk;
+import net.minecraft.world.level.levelgen.feature.DesertWellFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.structures.DesertPyramidStructure;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -25,15 +31,17 @@ public class APStructures {
 
 
     // Helper method to register since compiler will complain about typing if we did () -> SkyStructures.CODEC directly.
-    private static <S extends Structure> StructureType<S> typeConvert(Codec<S> codec) {
+    private static <S extends Structure> StructureType<S> typeConvert(MapCodec<S> codec) {
         return () -> codec;
     }
-
-    public static final TagKey<Structure> VILLAGE_TAG = TagKey.create(Registries.STRUCTURE, new ResourceLocation("aprandomizer:village"));
-    public static final TagKey<Structure> OUTPOST_TAG = TagKey.create(Registries.STRUCTURE, new ResourceLocation("aprandomizer:pillager_outpost"));
-    public static final TagKey<Structure> END_CITY_TAG = TagKey.create(Registries.STRUCTURE, new ResourceLocation("aprandomizer:end_city"));
-    public static final TagKey<Structure> BASTION_REMNANT_TAG = TagKey.create(Registries.STRUCTURE, new ResourceLocation("aprandomizer:bastion_remnant"));
-    public static final TagKey<Structure> FORTRESS_TAG = TagKey.create(Registries.STRUCTURE, new ResourceLocation("aprandomizer:fortress"));
+    
+   
+    public static final TagKey<Structure> VILLAGE_TAG = TagKey.create(Registries.STRUCTURE, ResourceLocation.parse("aprandomizer:village"));
+    public static final TagKey<Structure> OUTPOST_TAG = TagKey.create(Registries.STRUCTURE,  ResourceLocation.parse("aprandomizer:pillager_outpost"));
+    public static final TagKey<Structure> END_CITY_TAG = TagKey.create(Registries.STRUCTURE, ResourceLocation.parse("aprandomizer:end_city"));
+    public static final TagKey<Structure> BASTION_REMNANT_TAG = TagKey.create(Registries.STRUCTURE, ResourceLocation.parse("aprandomizer:bastion_remnant"));
+    public static final TagKey<Structure> FORTRESS_TAG = TagKey.create(Registries.STRUCTURE, ResourceLocation.parse("aprandomizer:fortress"));
+    public static final TagKey<Structure> TRIAL_CHAMBERS_TAG = TagKey.create(Registries.STRUCTURE, ResourceLocation.parse("aprandomizer:trial_chamber"));
 
 
 }

@@ -13,7 +13,7 @@ public class WorldData {
     private int dragonState = DRAGON_ASLEEP;
 
     private boolean jailPlayers = true;
-
+    private int informMode = BOTH;
     private Set<Long> locations = new HashSet<>();
 
     public static final int DRAGON_KILLED = 30;
@@ -21,6 +21,11 @@ public class WorldData {
     public static final int DRAGON_WAITING = 15;
     public static final int DRAGON_ASLEEP = 10;
 
+    public static final int NONE = 0;
+    public static final int TITLE = 1;
+    public static final int SIDEBAR = 2;
+    public static final int BOTH = 3;
+     
     public void setSeedName(String seedName) {
         this.seedName = seedName;
     }
@@ -45,6 +50,14 @@ public class WorldData {
         this.jailPlayers = jailPlayers;
     }
 
+    public int getInformMode() {
+    	return informMode;
+    }
+    
+    public void setInformMode(int mode) {
+    	informMode = mode;
+    }
+    
     public void addLocation(Long location) {
         this.locations.add(location);
     }

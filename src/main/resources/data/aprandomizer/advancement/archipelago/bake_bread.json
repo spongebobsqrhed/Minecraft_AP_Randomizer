@@ -1,0 +1,36 @@
+{
+  "parent": "aprandomizer:archipelago/root",
+  "criteria": {
+    "get_bread": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:bread"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "icon": {
+	  "count": 1,
+      "id": "minecraft:bread"
+    },
+    "title": {
+      "translate": "Bake Bread"
+    },
+    "description": {
+      "translate": "Turn wheat into bread"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+ 
+  "requirements": [
+    [
+      "get_bread"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

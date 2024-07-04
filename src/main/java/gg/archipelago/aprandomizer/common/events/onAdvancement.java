@@ -4,8 +4,12 @@ import gg.archipelago.aprandomizer.APRandomizer;
 import gg.archipelago.aprandomizer.APStorage.APMCData;
 import gg.archipelago.aprandomizer.managers.advancementmanager.AdvancementManager;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.advancements.AdvancementTree;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.commands.AdvancementCommands;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,10 +39,10 @@ public class onAdvancement {
         //dont do any checking if the apmcdata file is not valid.
         if (APRandomizer.getApmcData().state != APMCData.State.VALID)
             return;
-
+      
         ServerPlayer player = (ServerPlayer) event.getEntity();
-        Advancement advancement = event.getAdvancement();
-        String id = advancement.getId().toString();
+        AdvancementHolder advancement = event.getAdvancement();
+        String id = advancement.id().toString();
 
         AdvancementManager am = APRandomizer.getAdvancementManager();
         //don't do anything if this advancement has already been had, or is not on our list of tracked advancements.
@@ -46,15 +50,20 @@ public class onAdvancement {
             LOGGER.debug("{} has gotten the advancement {}", player.getDisplayName().getString(), id);
             am.addAdvancement(am.getAdvancementID(id));
             am.syncAdvancement(advancement);
-            if(advancement.getDisplay() == null)
+            if(advancement.value().display() == null)
                 return;
+            
+            MutableComponent translate = 
+            		Component.translatable(
+            				"chat.type.advancement."
+            						+ advancement.value().display().get().getType().name().toLowerCase(),
+            				player.getDisplayName(),
+            				advancement.value().name().get()
+            );
+          //  LOGGER.info(translate);
+            
             APRandomizer.getServer().getPlayerList().broadcastSystemMessage(
-                    Component.translatable(
-                            "chat.type.advancement."
-                                    + advancement.getDisplay().getFrame().getName(),
-                            player.getDisplayName(),
-                            advancement.getChatComponent()
-                    ),
+                   translate,
                     false
             );
 
