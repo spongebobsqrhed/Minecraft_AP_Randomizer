@@ -499,7 +499,7 @@
     "frame": "challenge",
     "icon": {
       "count": 1,
-      "id": "minecraft:diamond_sword"
+      "id": "minecraft:netherite_sword"
     },
     "title": {
       "translate": "advancements.adventure.kill_all_mobs.title"

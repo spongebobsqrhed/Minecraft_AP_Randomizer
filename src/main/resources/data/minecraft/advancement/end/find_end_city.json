@@ -42,7 +42,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "minecraft:purpur_block"
+      "id": "minecraft:purpur_block"
     },
     "show_toast": true,
     "title": {

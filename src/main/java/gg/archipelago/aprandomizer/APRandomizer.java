@@ -210,7 +210,6 @@ public class APRandomizer {
             LOGGER.error("invalid APMC file");
         }
         server = event.getServer();
-        LOGGER.debug("About to search!");
     }
 
     @SuppressWarnings("UnusedAssignment")
@@ -236,9 +235,7 @@ public class APRandomizer {
         //fetch our custom world save data we attach to the worlds.
         worldData = server.getLevel(Level.OVERWORLD).getCapability(APCapabilities.WORLD_DATA).orElseThrow(AssertionError::new);
         jailPlayers = worldData.getJailPlayers();
-        advancementManager.setCheckedAdvancements(worldData.getLocations());
-        
-        server.getPackRepository().getAvailableIds().forEach((id)->{LOGGER.debug(id);  });
+        advancementManager.setCheckedAdvancements(worldData.getLocations()); 
         //check if APMC data is present and if the seed matches what we expect
         if (apmcData.state == APMCData.State.VALID && !worldData.getSeedName().equals(apmcData.seed_name)) {
             //check to see if our worlddata is empty if it is then save the aproom data.

@@ -183,7 +183,6 @@ public class AdvancementManager {
     }};
 
     public final Set<ResourceLocation> unreasonableAdvancements = new HashSet<>() {{
-        add(ResourceLocation.parse("nether/all_potions")); // A Furious Cocktail?
         add(ResourceLocation.parse("nether/all_effects")); // How Did We Get Here?
         add(ResourceLocation.parse("adventure/adventuring_time"));
         add(ResourceLocation.parse("archipelago/tunes_of_the_raft"));
