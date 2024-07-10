@@ -1,0 +1,9 @@
+Additions:
+	- Added the 1.20, 1.20.5, and 1.21 advancements.
+	- Added a new way of viewing received items, as a scoreboard on the sidebar.
+	- Added a new command, /inform, which can switch how your received items are displayed.
+	- Added a new advancement for collecting all the music discs.
+	- Added a new compass that points to Trial Chambers.
+Changes:
+	- Removed Camels and Zoglins from their respective advancements.
+	- Changed how items are given, so you shouldn't get duplicate items.

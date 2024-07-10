@@ -143,16 +143,21 @@ public class AdvancementManager {
         put("minecraft:husbandry/obtain_sniffer_egg", 42119L);
         put("minecraft:husbandry/feed_snifflet", 42120L);
         put("minecraft:husbandry/plant_any_sniffer_seed", 42121L);
-        // 1.21 advancements
-        put("minecraft:adventure/minecraft_trials_edition", 42122L);
-        put("minecraft:adventure/crafters_crafting_crafters", 42123L);
-        put("minecraft:adventure/lighten_up", 42124L);
-        put("minecraft:adventure/who_needs_rockets", 42125L);
-        put("minecraft:adventure/under_lock_and_key", 42126L);
-        put("minecraft:adventure/revaulting", 42127L);
-        put("minecraft:adventure/blowback", 42128L);
-        put("minecraft:adventure/overoverkill", 42129L);
-        put("aprandomizer:archipelago/tunes_of_the_raft", 42130L);
+        //1.20.5 advancements
+        put("minecraft:adventure/brush_armadillo", 42122L);
+        put("minecraft:husbandry/whole_pack", 42123L);
+        put("minecraft:husbandry/repair_wolf_armor", 42124L);
+        put("minecraft:husbandry/remove_wolf_armor", 42125L);
+         // 1.21 advancements
+        put("minecraft:adventure/minecraft_trials_edition", 42126L);
+        put("minecraft:adventure/crafters_crafting_crafters", 42127L);
+        put("minecraft:adventure/lighten_up", 42128L);
+        put("minecraft:adventure/who_needs_rockets", 42129L);
+        put("minecraft:adventure/under_lock_and_key", 42130L);
+        put("minecraft:adventure/revaulting", 42131L);
+        put("minecraft:adventure/blowback", 42132L);
+        put("minecraft:adventure/overoverkill", 42133L);
+        put("aprandomizer:archipelago/tunes_of_the_raft", 42134L);
     }};
 
     public static final Set<ResourceLocation> hardAdvancements = new HashSet<>() {{
@@ -167,6 +172,7 @@ public class AdvancementManager {
         add(ResourceLocation.parse("nether/uneasy_alliance")); // Uneasy Alliance
         add(ResourceLocation.parse("nether/netherite_armor")); // Cover Me in Debris
         add(ResourceLocation.parse("husbandry/complete_catalogue")); // A Complete Catalogue
+        add(ResourceLocation.parse("husbandry/whole_pack")); // The Whole Pack
         add(ResourceLocation.parse("adventure/lightning_rod_with_villager_no_fire")); // Surge Protector
         add(ResourceLocation.parse("adventure/play_jukebox_in_meadows")); // Sound of Music
         add(ResourceLocation.parse("adventure/trade_at_world_height")); // Star Trader
@@ -178,14 +184,14 @@ public class AdvancementManager {
         add(ResourceLocation.parse("husbandry/obtain_sniffer_egg")); //Smells Interesting
         add(ResourceLocation.parse("husbandry/feed_snifflet")); //Little Sniffs
         add(ResourceLocation.parse("husbandry/plant_any_sniffer_seed")); //Planting the Past
-        add(ResourceLocation.parse("adventure/revaulting"));
-        add(ResourceLocation.parse("adventure/overoverkill"));
+        add(ResourceLocation.parse("adventure/revaulting")); //Revaulting        
+        add(ResourceLocation.parse("adventure/overoverkill")); //Over-Overkill
     }};
 
     public final Set<ResourceLocation> unreasonableAdvancements = new HashSet<>() {{
         add(ResourceLocation.parse("nether/all_effects")); // How Did We Get Here?
-        add(ResourceLocation.parse("adventure/adventuring_time"));
-        add(ResourceLocation.parse("archipelago/tunes_of_the_raft"));
+        add(ResourceLocation.parse("adventure/adventuring_time")); //Adventuring Time
+        add(ResourceLocation.parse("archipelago/tunes_of_the_raft")); // Tunes of the Raft
     }};
 
     private final Set<Long> earnedAdvancements = new HashSet<>();
