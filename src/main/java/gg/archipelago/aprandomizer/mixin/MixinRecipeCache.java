@@ -17,7 +17,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 
 @Mixin(RecipeCache.class)
-public class MixinRecipeCache {
+public abstract class MixinRecipeCache {
 
 	
 	@Inject(method = "get(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/crafting/CraftingInput;)Ljava/util/Optional;", at = @At("RETURN"), cancellable = true)

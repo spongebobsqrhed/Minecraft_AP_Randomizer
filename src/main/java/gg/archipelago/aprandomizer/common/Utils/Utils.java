@@ -196,6 +196,7 @@ public class Utils {
             case "aprandomizer:pillager_outpost" -> "Pillager Outpost";
             case "aprandomizer:fortress" -> "Nether Fortress";
             case "aprandomizer:bastion_remnant" -> "Bastion Remnant";
+            case "aprandomizer:trial_chamber" -> "Trial Chambers";
             default -> structureTag.location().getPath().toLowerCase();
         };
     }

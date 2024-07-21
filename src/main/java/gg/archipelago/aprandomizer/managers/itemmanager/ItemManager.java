@@ -141,7 +141,7 @@ public class ItemManager {
         addLore(trialChamberCompass, "Structure Compass (Trial Chambers)", compassLore);
         put(45047L, trialChamberCompass);
         
-        put(45044L, new ItemStack(Items.SHULKER_BOX, 1)); 
+        put(45042L, new ItemStack(Items.SHULKER_BOX, 1)); 
         
     }};
 
@@ -151,7 +151,7 @@ public class ItemManager {
         put(45039L, APStructures.FORTRESS_TAG);
         put(45040L, APStructures.BASTION_REMNANT_TAG);
         put(45041L, APStructures.END_CITY_TAG);
-        put(45042L, APStructures.TRIAL_CHAMBERS_TAG);
+        put(45047L, APStructures.TRIAL_CHAMBERS_TAG);
 
     }};
 
@@ -271,7 +271,7 @@ public class ItemManager {
         LazyOptional<PlayerData> loPlayerData = player.getCapability(APCapabilities.PLAYER_INDEX);
         if (loPlayerData.isPresent()) {
             PlayerData playerData = loPlayerData.orElseThrow(AssertionError::new);
-            LOGGER.info("Player data: "+playerData.getIndex());
+            LOGGER.debug("Player data: "+playerData.getIndex());
             for (int i = playerData.getIndex(); i < receivedItems.size(); i++) {
                 giveItem(receivedItems.get(i), player);
             }

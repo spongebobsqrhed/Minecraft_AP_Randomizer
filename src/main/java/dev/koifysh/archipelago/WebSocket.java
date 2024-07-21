@@ -16,6 +16,7 @@ import dev.koifysh.archipelago.network.client.SayPacket;
 import dev.koifysh.archipelago.parts.DataPackage;
 import dev.koifysh.archipelago.parts.NetworkItem;
 import dev.koifysh.archipelago.parts.NetworkPlayer;
+import gg.archipelago.aprandomizer.APRandomizer;
 import dev.koifysh.archipelago.events.*;
 import dev.koifysh.archipelago.network.server.*;
 
@@ -99,11 +100,10 @@ class WebSocket extends WebSocketClient {
                         break;
                     case Connected:
                         ConnectedPacket connectedPacket = gson.fromJson(packet, ConnectedPacket.class);
-
                         client.setTeam(connectedPacket.team);
                         client.setSlot(connectedPacket.slot);
                         client.setSlotInfo(connectedPacket.slotInfo);
-
+                        
                         client.getRoomInfo().networkPlayers.addAll(connectedPacket.players);
                         client.getRoomInfo().networkPlayers.add(new NetworkPlayer(connectedPacket.team, 0, "Archipelago"));
                         client.setAlias(client.getRoomInfo().getPlayer(connectedPacket.team, connectedPacket.slot).alias);
@@ -151,10 +151,10 @@ class WebSocket extends WebSocketClient {
                                 print.parts[p].text = player.alias;
                             } else if (print.parts[p].type == APPrintType.itemID) {
                                 long itemID = Long.parseLong(print.parts[p].text);
-                                print.parts[p].text = client.getDataPackage().getItem(itemID, client.getSlotInfo().get(print.parts[i].player).game);
+                                print.parts[p].text = client.getDataPackage().getItem(itemID, client.getSlotInfo().get(print.parts[p].player).game);
                             } else if (print.parts[p].type == APPrintType.locationID) {
                                 long locationID = Long.parseLong(print.parts[p].text);
-                                print.parts[p].text = client.getDataPackage().getLocation(locationID, client.getSlotInfo().get(print.parts[i].player).game);
+                                print.parts[p].text = client.getDataPackage().getLocation(locationID, client.getSlotInfo().get(print.parts[p].player).game);
                             }
                         }
 
