@@ -27,7 +27,7 @@ public class APClient extends dev.koifysh.archipelago.Client {
     APClient(MinecraftServer server) {
         super();
 
-        this.setGame("Minecraft");
+        this.setGame("Minecraft21");
         this.setItemsHandlingFlags(ItemFlags.SEND_ITEMS + ItemFlags.SEND_OWN_ITEMS + ItemFlags.SEND_STARTING_INVENTORY);
         this.server = server;
         APRandomizer.getAdvancementManager().setCheckedAdvancements(getLocationManager().getCheckedLocations());

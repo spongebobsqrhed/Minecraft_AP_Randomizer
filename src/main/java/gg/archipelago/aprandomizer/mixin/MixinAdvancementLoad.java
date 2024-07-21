@@ -28,16 +28,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ServerAdvancementManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.inventory.CrafterMenu;
+import net.minecraft.world.level.block.entity.CrafterBlockEntity;
 
 @Mixin(ServerAdvancementManager.class)
 public abstract class MixinAdvancementLoad {
 
 	@Shadow
 	public Map<ResourceLocation, AdvancementHolder> advancements;
-
+	
 	@Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("RETURN"))
 	private void loadAdvancements(Map<ResourceLocation, JsonElement> pObject, ResourceManager pResourceManager,
 			ProfilerFiller pProfiler, CallbackInfo ci) {
+			LOGGER.info("Loading Advancements");
 		try {
 			LOGGER.debug("Advancement Load Found.");
 			Builder<ResourceLocation, AdvancementHolder> newAdvancements = ImmutableMap.builder();

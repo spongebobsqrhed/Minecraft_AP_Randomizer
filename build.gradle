@@ -1,3 +1,4 @@
+/*
 plugins {
     id 'eclipse'
     id 'idea'
@@ -6,14 +7,33 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
 }
-
+/*/
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
+        jcenter()
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
+        maven { url = 'https://maven.parchmentmc.org' }
+    }
+    dependencies {
+        classpath "net.minecraftforge.gradle:ForgeGradle:[6.0.24,6.2)"
+        classpath "org.spongepowered:mixingradle:0.7-SNAPSHOT"
+        classpath "org.parchmentmc:librarian:1.+"
+    }
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
+//*/
 version = mod_version
 group = mod_group_id
 
 base {
     archivesName = mod_id
 }
-
 // Mojang ships Java 21 to end users in 1.20.5+, so your mod should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 jarJar.enable()
@@ -33,7 +53,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'parchment', version: '2024.06.23-1.21'
+    mappings channel: 'official', version: '1.21'//'2024.06.23-1.21'
     
     // Tell FG to not automtically create the reobf tasks, as we now use Official mappings at runtime, If you don't use them at dev time then you'll have to fix your reobf yourself.
     reobf = false
@@ -122,10 +142,6 @@ repositories {
     // }
 }
 
-mixin {
-    add sourceSets.main, "aprandomizer.refmap.json"
-    config 'aprandomizer.mixins.json'
-}
 
 dependencies {
     // Specify the version of Minecraft to use.
@@ -161,7 +177,7 @@ dependencies {
     jarJar(group: 'org.apache.httpcomponents.client5', name:'httpclient5', version:'[5.0, 6.0)') { jarJar.pin(it, '5.2.1') }
     jarJar(group: 'org.apache.httpcomponents.core5', name:'httpcore5', version:'[5.0, 6.0)') { jarJar.pin(it, '5.2') } 
     
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.7:processor'
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -182,9 +198,13 @@ tasks.named('processResources', ProcessResources).configure {
         expand replaceProperties + [project: project]
     }
 }
-tasks.named('jarJar') {
-	println 'Jar Jar Binks!'
+
+mixin {
+	println 'DO THE STUPID MIXINS'
+    add sourceSets.main, "aprandomizer.refmap.json"
+    config 'aprandomizer.mixins.json'
 }
+
 // Example for how to get properties into the manifest for reading at runtime.
 tasks.named('jar', Jar).configure {
     manifest {
@@ -194,9 +214,11 @@ tasks.named('jar', Jar).configure {
             'Specification-Version'   : '1', // We are version 1 of ourselves
             'Implementation-Title'    : project.name,
             'Implementation-Version'  : project.jar.archiveVersion,
-            'Implementation-Vendor'   : mod_authors
+            'Implementation-Vendor'   : mod_authors,
+            'MixinConfigs'            : 'aprandomizer.mixins.json'
         ])
     }
+   // finalizedBy 'jarJar'
 }
 // Example configuration to allow publishing using the maven-publish plugin
 

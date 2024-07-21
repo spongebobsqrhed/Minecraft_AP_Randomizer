@@ -1,0 +1,19 @@
+{
+  "mappings": {
+    "gg/archipelago/aprandomizer/mixin/MixinRaid": {
+      "findRandomSpawnPos(II)Lnet/minecraft/core/BlockPos;": "Lnet/minecraft/world/entity/raid/Raid;findRandomSpawnPos(II)Lnet/minecraft/core/BlockPos;"
+    },
+    "gg/archipelago/aprandomizer/mixin/MixinRecipeCache": {
+      "CheckRecipe(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/crafting/CraftingInput;)V": "Lnet/minecraft/world/item/crafting/RecipeCache;get(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/crafting/CraftingInput;)Ljava/util/Optional;"
+    },
+	"gg/archipelago/aprandomizer/mixin/MixinAdvancementLoad": {
+      "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V": "Lnet/minecraft/server/ServerAdvancementManager;apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V"
+    },
+    "gg/archipelago/aprandomizer/mixin/MixinPropertyManager": {
+      "loadFromFile(Ljava/nio/file/Path;)Ljava/util/Properties;": "Lnet/minecraft/server/dedicated/Settings;loadFromFile(Ljava/nio/file/Path;)Ljava/util/Properties;"
+    }
+  },
+  "data": {
+    
+  }
+}
